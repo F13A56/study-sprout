@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Study Sprout 🌱</title>
+<style>
+:root{
+  --bg:#f5fbf3; --card:#ffffff; --ink:#25412c; --muted:#66766a;
+  --green:#69b578; --green2:#3f9252; --yellow:#ffd66b; --pink:#f7a8b8;
+  --blue:#8fc8ee; --shadow:0 8px 24px rgba(42,83,50,.10);
+}
+*{box-sizing:border-box}
+body{margin:0;font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;background:var(--bg);color:var(--ink)}
+button,input{font:inherit}
+button{border:0;cursor:pointer}
+.app{max-width:1000px;margin:auto;padding:18px}
+header{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:16px}
+.logo{font-size:25px;font-weight:800}
+.logo span{font-size:30px}
+.headerBtns{display:flex;gap:8px}
+.iconBtn{background:var(--card);color:var(--ink);padding:11px 13px;border-radius:14px;box-shadow:var(--shadow)}
+.hero{background:linear-gradient(135deg,#e8f8e8,#fff7d9);border-radius:24px;padding:22px;box-shadow:var(--shadow);margin-bottom:16px}
+.hero h1{margin:0 0 5px;font-size:30px}
+.hero p{margin:0;color:var(--muted)}
+.grid{display:grid;grid-template-columns:1.2fr .8fr;gap:16px}
+.card{background:var(--card);border-radius:22px;padding:18px;box-shadow:var(--shadow)}
+.card h2{font-size:19px;margin:0 0 12px}
+.timer{text-align:center}
+.time{font-size:70px;font-weight:800;letter-spacing:2px;margin:8px 0}
+.timerMode{color:var(--muted);font-weight:600}
+.bigBtn{width:100%;padding:15px;border-radius:16px;background:var(--green2);color:white;font-weight:800;font-size:18px;margin-top:10px}
+.secondary{background:#edf6ee;color:var(--ink)}
+.timerRow{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:8px}
+.goal{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px}
+.progress{height:13px;background:#edf1ed;border-radius:20px;overflow:hidden}
+.progress div{height:100%;background:var(--green);width:0%;transition:.3s}
+.goalText{font-size:14px;color:var(--muted);margin-top:8px}
+.taskInput{display:flex;gap:8px}
+.taskInput input{flex:1;border:2px solid #e3ebe4;border-radius:13px;padding:11px;outline:none}
+.taskInput input:focus{border-color:var(--green)}
+.tasks{list-style:none;padding:0;margin:12px 0 0}
+.tasks li{display:flex;align-items:center;gap:9px;padding:10px 0;border-bottom:1px solid #eef2ee}
+.tasks li:last-child{border-bottom:0}
+.tasks input{width:20px;height:20px;accent-color:var(--green2)}
+.taskDone{text-decoration:line-through;color:#91a096}
+.plant{text-align:center}
+.plantEmoji{font-size:85px;line-height:1;margin:8px 0}
+.plant p{color:var(--muted);margin:5px 0}
+.chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}
+.chip{background:#f1f7f1;padding:8px 11px;border-radius:999px;font-size:13px;font-weight:700}
+.more{margin-top:16px}
+.moreGrid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.moreBtn{padding:14px;border-radius:16px;background:#f4f8f4;color:var(--ink);font-weight:750}
+.hidden{display:none}
+.panel{margin-top:12px;padding:14px;border-radius:16px;background:#f7faf7}
+.modalWrap{position:fixed;inset:0;background:rgba(20,40,25,.38);display:flex;align-items:center;justify-content:center;padding:18px;z-index:10}
+.modal{background:white;border-radius:24px;padding:20px;max-width:520px;width:100%;box-shadow:0 18px 50px rgba(0,0,0,.18)}
+.modalHead{display:flex;justify-content:space-between;align-items:center}
+.soundGrid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:14px 0}
+.sound{padding:18px 10px;border-radius:17px;background:#eef7ef;color:var(--ink);font-weight:800}
+.sound.active{outline:3px solid var(--green)}
+.slider{width:100%}
+.small{font-size:13px;color:var(--muted)}
+.close{background:#f1f3f1;border-radius:12px;padding:8px 11px}
+footer{text-align:center;color:#849087;font-size:12px;padding:18px}
+body.dark{--bg:#172119;--card:#223025;--ink:#eef8ef;--muted:#b7c4b9;--shadow:0 8px 24px rgba(0,0,0,.22)}
+body.dark .secondary,body.dark .moreBtn,body.dark .chip,body.dark .panel,body.dark .iconBtn,body.dark .close,body.dark .sound{background:#2b3a2e;color:var(--ink)}
+body.dark .taskInput input{background:#26352a;color:var(--ink);border-color:#3a4b3d}
+body.dark .progress{background:#344338}
+@media(max-width:720px){
+ .grid{grid-template-columns:1fr}
+ .moreGrid{grid-template-columns:1fr 1fr}
+ .time{font-size:58px}
+ .hero h1{font-size:26px}
+}
+</style>
+</head>
+<body>
+<div class="app">
+<header>
+  <div class="logo"><span>🌱</span> Study Sprout</div>
+  <div class="headerBtns">
+    <button class="iconBtn" onclick="openMusic()">🎵 Music</button>
+    <button class="iconBtn" onclick="toggleDark()">🌙</button>
+  </div>
+</header>
+
+<section class="hero">
+  <h1>Ready to learn? 📚</h1>
+  <p>Pick one thing to work on, start the timer, and let your little sprout grow!</p>
+</section>
+
+<div class="grid">
+  <section class="card timer">
+    <h2>🌟 Focus Time</h2>
+    <div class="timerMode" id="timerMode">Study • 25 minutes</div>
+    <div class="time" id="time">25:00</div>
+    <button class="bigBtn" id="startBtn" onclick="toggleTimer()">▶ Start</button>
+    <div class="timerRow">
+      <button class="bigBtn secondary" onclick="setTimer(25)">25 min</button>
+      <button class="bigBtn secondary" onclick="setTimer(10)">10 min</button>
+    </div>
+  </section>
+
+  <section class="card">
+    <div class="goal">
+      <h2>🎯 Today's Goal</h2>
+      <b id="goalPct">0%</b>
+    </div>
+    <div class="progress"><div id="goalBar"></div></div>
+    <div class="goalText" id="goalText">0 of 60 study minutes</div>
+    <div class="chips">
+      <div class="chip">🔥 Streak: <span id="streak">0</span></div>
+      <div class="chip">⭐ XP: <span id="xp">0</span></div>
+    </div>
+    <div class="plant">
+      <div class="plantEmoji" id="plant">🌱</div>
+      <p id="plantText">Study a little to help me grow!</p>
+    </div>
+  </section>
+</div>
+
+<section class="card" style="margin-top:16px">
+  <h2>📝 Homework</h2>
+  <div class="taskInput">
+    <input id="taskInput" placeholder="Add a homework task..." maxlength="70" onkeydown="if(event.key==='Enter') addTask()">
+    <button class="bigBtn" style="width:auto;margin:0;padding:11px 16px" onclick="addTask()">Add</button>
+  </div>
+  <ul class="tasks" id="tasks"></ul>
+</section>
+
+<section class="card more">
+  <h2>✨ More</h2>
+  <div class="moreGrid">
+    <button class="moreBtn" onclick="showTips()">💡 Study Tip</button>
+    <button class="moreBtn" onclick="showBreak()">🧘 Break</button>
+    <button class="moreBtn" onclick="showPractice()">🧠 Practice</button>
+    <button class="moreBtn" onclick="showRewards()">🏆 Rewards</button>
+    <button class="moreBtn" onclick="resetToday()">🔄 Reset Today</button>
+    <button class="moreBtn" onclick="openMusic()">🎵 Sounds</button>
+  </div>
+  <div id="morePanel" class="panel hidden"></div>
+</section>
+
+<footer>Made for curious learners 🌈 • Your progress is saved on this device.</footer>
+</div>
+
+<div id="musicModal" class="modalWrap hidden" onclick="if(event.target===this)closeMusic()">
+ <div class="modal">
+  <div class="modalHead"><h2>🎵 Study Sounds</h2><button class="close" onclick="closeMusic()">✕</button></div>
+  <p class="small">Choose a calm sound to play while you study. Tap again to stop it.</p>
+  <div class="soundGrid">
+   <button class="sound" id="soundMusic" onclick="playSound('music')">🎹 Calm Music</button>
+   <button class="sound" id="soundRain" onclick="playSound('rain')">🌧️ Rain</button>
+   <button class="sound" id="soundNature" onclick="playSound('nature')">🌿 Nature</button>
+   <button class="sound" id="soundOff" onclick="stopSound()">🔇 Stop</button>
+  </div>
+  <label class="small">Volume</label>
+  <input class="slider" id="volume" type="range" min="0" max="1" step=".01" value=".25" oninput="setVolume(this.value)">
+ </div>
+</div>
+
+<script>
+const KEY="studySproutSimple";
+let data=JSON.parse(localStorage.getItem(KEY)||'null')||{minutes:0,xp:0,streak:0,tasks:[],dark:false,lastDay:""};
+const today=new Date().toDateString();
+if(data.lastDay!==today){data.minutes=0;data.tasks=data.tasks||[];data.lastDay=today;save();}
+document.body.classList.toggle("dark",data.dark);
+
+let totalSeconds=1500, remaining=1500, running=false, timerId=null;
+let audioCtx=null, master=null, soundTimer=null, activeSound=null;
+
+function save(){localStorage.setItem(KEY,JSON.stringify(data));render();}
+function render(){
+ document.getElementById("time").textContent=fmt(remaining);
+ document.getElementById("xp").textContent=data.xp;
+ document.getElementById("streak").textContent=data.streak;
+ const pct=Math.min(100,Math.round(data.minutes/60*100));
+ document.getElementById("goalPct").textContent=pct+"%";
+ document.getElementById("goalBar").style.width=pct+"%";
+ document.getElementById("goalText").textContent=data.minutes+" of 60 study minutes";
+ const plant=data.minutes>=60?"🌳":data.minutes>=40?"🌿":data.minutes>=20?"🌱":"🌰";
+ document.getElementById("plant").textContent=plant;
+ document.getElementById("plantText").textContent=data.minutes>=60?"Your sprout grew into a tree! 🎉":data.minutes>=40?"Almost a full-grown plant!":"Keep studying to help me grow!";
+ const ul=document.getElementById("tasks"); ul.innerHTML="";
+ data.tasks.forEach((t,i)=>{
+   const li=document.createElement("li");
+   li.innerHTML=`<input type="checkbox" ${t.done?"checked":""} onchange="toggleTask(${i})"><span class="${t.done?'taskDone':''}">${esc(t.text)}</span><button style="margin-left:auto;background:none" onclick="deleteTask(${i})">🗑️</button>`;
+   ul.appendChild(li);
+ });
+}
+function fmt(s){return String(Math.floor(s/60)).padStart(2,"0")+":"+String(s%60).padStart(2,"0")}
+function setTimer(min){
+ clearInterval(timerId);running=false;remaining=min*60;totalSeconds=remaining;
+ document.getElementById("startBtn").textContent="▶ Start";
+ document.getElementById("timerMode").textContent="Study • "+min+" minutes";render();
+}
+function toggleTimer(){
+ if(running){clearInterval(timerId);running=false;document.getElementById("startBtn").textContent="▶ Resume";return}
+ running=true;document.getElementById("startBtn").textContent="⏸ Pause";
+ timerId=setInterval(()=>{
+   remaining--;
+   if(remaining<=0){clearInterval(timerId);running=false;document.getElementById("startBtn").textContent="▶ Start";finishSession();remaining=totalSeconds;}
+   render();
+ },1000);
+}
+function finishSession(){
+ const mins=Math.round(totalSeconds/60);
+ data.minutes+=mins; data.xp+=mins*2; data.streak=Math.max(1,data.streak+1); save();
+ alert("🎉 Great job! You finished a study session and earned "+(mins*2)+" XP!");
+}
+function addTask(){const el=document.getElementById("taskInput");const t=el.value.trim();if(!t)return;data.tasks.push({text:t,done:false});el.value="";save()}
+function toggleTask(i){data.tasks[i].done=!data.tasks[i].done;if(data.tasks[i].done)data.xp+=10;save()}
+function deleteTask(i){data.tasks.splice(i,1);save()}
+function resetToday(){if(confirm("Reset today's study minutes and homework list?")){data.minutes=0;data.tasks=[];data.xp=0;save()}}
+function toggleDark(){data.dark=!data.dark;document.body.classList.toggle("dark",data.dark);save()}
+function panel(html){const p=document.getElementById("morePanel");p.innerHTML=html;p.classList.remove("hidden")}
+function showTips(){const tips=["Try one small task first.","Read the question twice before answering.","If you're stuck, take a short break and try again.","Explain what you learned out loud—it can help you remember!"];panel("💡 <b>Study Tip:</b> "+tips[Math.floor(Math.random()*tips.length)])}
+function showBreak(){panel("🧘 <b>Mini Break:</b> Look away from your screen, stretch your arms, take a few slow breaths, then come back when you're ready.")}
+function showPractice(){const a=Math.floor(Math.random()*9)+2,b=Math.floor(Math.random()*9)+2;panel(`🧠 <b>Quick Math:</b> What is ${a} × ${b}? <br><button class="moreBtn" style="margin-top:10px" onclick="this.parentElement.innerHTML='🧠 Answer: '+(${a}*${b})+'! Nice work!'">Show answer</button>`)}
+function showRewards(){panel(`🏆 <b>Your Rewards:</b> ${data.xp} XP earned. ${data.xp>=100?"You've unlocked Super Sprout! ⭐":"Earn more XP by finishing study sessions and homework!"}`)}
+function esc(s){return s.replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[m]))}
+
+function openMusic(){document.getElementById("musicModal").classList.remove("hidden")}
+function closeMusic(){document.getElementById("musicModal").classList.add("hidden")}
+function setVolume(v){if(master)master.gain.value=v}
+function ensureAudio(){
+ if(!audioCtx){audioCtx=new (window.AudioContext||window.webkitAudioContext)();master=audioCtx.createGain();master.gain.value=.25;master.connect(audioCtx.destination)}
+ if(audioCtx.state==="suspended")audioCtx.resume();
+}
+function stopSound(){
+ if(soundTimer)clearInterval(soundTimer);soundTimer=null;activeSound=null;
+ document.querySelectorAll(".sound").forEach(x=>x.classList.remove("active"));
+}
+function tone(freq,dur=.6,when=0){
+ const o=audioCtx.createOscillator(),g=audioCtx.createGain();
+ o.type="sine";o.frequency.value=freq;g.gain.setValueAtTime(0.0001,audioCtx.currentTime+when);
+ g.gain.exponentialRampToValueAtTime(.08,audioCtx.currentTime+when+.05);
+ g.gain.exponentialRampToValueAtTime(.0001,audioCtx.currentTime+when+dur);
+ o.connect(g);g.connect(master);o.start(audioCtx.currentTime+when);o.stop(audioCtx.currentTime+when+dur+.05);
+}
+function playSound(kind){
+ ensureAudio();stopSound();activeSound=kind;document.getElementById("sound"+kind.charAt(0).toUpperCase()+kind.slice(1)).classList.add("active");
+ if(kind==="music"){
+   const notes=[261.63,329.63,392,329.63,293.66,349.23,440,349.23];
+   let i=0; const loop=()=>{tone(notes[i%notes.length],1.4);i++;};loop();soundTimer=setInterval(loop,1400);
+ } else if(kind==="rain"){
+   const noise=audioCtx.createBufferSource(),buf=audioCtx.createBuffer(1,audioCtx.sampleRate*2,audioCtx.sampleRate);
+   const d=buf.getChannelData(0);for(let i=0;i<d.length;i++)d[i]=(Math.random()*2-1)*.12;
+   noise.buffer=buf;noise.loop=true;const filter=audioCtx.createBiquadFilter();filter.type="lowpass";filter.frequency.value=1700;
+   const g=audioCtx.createGain();g.gain.value=.45;noise.connect(filter);filter.connect(g);g.connect(master);noise.start();soundTimer={stop:()=>noise.stop()};
+ } else {
+   const notes=[392,493.88,587.33,493.88];let i=0;const loop=()=>{tone(notes[i%4],1.8);i++};loop();soundTimer=setInterval(loop,1800);
+ }
+}
+render();
+</script>
+</body>
+</html>
